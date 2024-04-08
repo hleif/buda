@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.back.system.mapper.UsersMapper">
+    
+    <resultMap type="Users" id="UsersResult">
+        <result property="userId"    column="user_id"    />
+        <result property="username"    column="username"    />
+        <result property="phone"    column="phone"    />
+        <result property="wxid"    column="wxid"    />
+        <result property="idNumber"    column="id_number"    />
+        <result property="openid"    column="openid"    />
+        <result property="usercode"    column="usercode"    />
+        <result property="appointmentStatus"    column="appointment_status"    />
+        <result property="qrcodeLink"    column="qrcode_link"    />
+        <result property="bookId"    column="book_id"    />
+        <result property="userUuid"    column="user_uuid"    />
+        <result property="appointmentTime"    column="appointment_time"    />
+    </resultMap>
+
+    <sql id="selectUsersVo">
+        select user_id, username, phone, wxid, id_number, openid, usercode, appointment_status, qrcode_link, book_id, user_uuid, appointment_time from users
+    </sql>
+
+    <select id="selectUsersList" parameterType="Users" resultMap="UsersResult">
+        <include refid="selectUsersVo"/>
+        <where>  
+            <if test="username != null  and username != ''"> and username like concat('%', #{username}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone like concat('%', #{phone}, '%')</if>
+            <if test="wxid != null  and wxid != ''"> and wxid = #{wxid}</if>
+            <if test="idNumber != null  and idNumber != ''"> and id_number = #{idNumber}</if>
+            <if test="openid != null  and openid != ''"> and openid = #{openid}</if>
+            <if test="usercode != null  and usercode != ''"> and usercode = #{usercode}</if>
+            <if test="appointmentStatus != null  and appointmentStatus != ''"> and appointment_status = #{appointmentStatus}</if>
+            <if test="qrcodeLink != null  and qrcodeLink != ''"> and qrcode_link = #{qrcodeLink}</if>
+            <if test="bookId != null  and bookId != ''"> and book_id = #{bookId}</if>
+            <if test="userUuid != null  and userUuid != ''"> and user_uuid = #{userUuid}</if>
+            <if test="appointmentTime != null  and appointmentTime != ''"> and appointment_time like concat('%', #{appointmentTime}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectUsersByUserId" parameterType="Long" resultMap="UsersResult">
+        <include refid="selectUsersVo"/>
+        where user_id = #{userId}
+    </select>
+        
+    <insert id="insertUsers" parameterType="Users" useGeneratedKeys="true" keyProperty="userId">
+        insert into users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null">username,</if>
+            <if test="phone != null">phone,</if>
+            <if test="wxid != null">wxid,</if>
+            <if test="idNumber != null">id_number,</if>
+            <if test="openid != null">openid,</if>
+            <if test="usercode != null">usercode,</if>
+            <if test="appointmentStatus != null">appointment_status,</if>
+            <if test="qrcodeLink != null">qrcode_link,</if>
+            <if test="bookId != null">book_id,</if>
+            <if test="userUuid != null">user_uuid,</if>
+            <if test="appointmentTime != null">appointment_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="username != null">#{username},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="wxid != null">#{wxid},</if>
+            <if test="idNumber != null">#{idNumber},</if>
+            <if test="openid != null">#{openid},</if>
+            <if test="usercode != null">#{usercode},</if>
+            <if test="appointmentStatus != null">#{appointmentStatus},</if>
+            <if test="qrcodeLink != null">#{qrcodeLink},</if>
+            <if test="bookId != null">#{bookId},</if>
+            <if test="userUuid != null">#{userUuid},</if>
+            <if test="appointmentTime != null">#{appointmentTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUsers" parameterType="Users">
+        update users
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="username != null">username = #{username},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="wxid != null">wxid = #{wxid},</if>
+            <if test="idNumber != null">id_number = #{idNumber},</if>
+            <if test="openid != null">openid = #{openid},</if>
+            <if test="usercode != null">usercode = #{usercode},</if>
+            <if test="appointmentStatus != null">appointment_status = #{appointmentStatus},</if>
+            <if test="qrcodeLink != null">qrcode_link = #{qrcodeLink},</if>
+            <if test="bookId != null">book_id = #{bookId},</if>
+            <if test="userUuid != null">user_uuid = #{userUuid},</if>
+            <if test="appointmentTime != null">appointment_time = #{appointmentTime},</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+    <delete id="deleteUsersByUserId" parameterType="Long">
+        delete from users where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteUsersByUserIds" parameterType="String">
+        delete from users where user_id in 
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+
+</mapper>

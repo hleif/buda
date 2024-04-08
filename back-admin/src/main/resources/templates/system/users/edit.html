@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改客户信息')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-users-edit" th:object="${users}">
+            <input name="userId" th:field="*{userId}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">用户名称：</label>
+                <div class="col-sm-8">
+                    <input name="username" th:field="*{username}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">电话号码：</label>
+                <div class="col-sm-8">
+                    <input name="phone" th:field="*{phone}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">身份证号：</label>
+                <div class="col-sm-8">
+                    <input name="idNumber" th:field="*{idNumber}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">wxid：</label>
+                <div class="col-sm-8">
+                    <input name="wxid" th:field="*{wxid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">openid：</label>
+                <div class="col-sm-8">
+                    <input name="openid" th:field="*{openid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">usercode：</label>
+                <div class="col-sm-8">
+                    <input name="usercode" th:field="*{usercode}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">qrcodeLink：</label>
+                <div class="col-sm-8">
+                    <input name="qrcodeLink" th:field="*{qrcodeLink}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">bookId：</label>
+                <div class="col-sm-8">
+                    <input name="bookId" th:field="*{bookId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">userUuid：</label>
+                <div class="col-sm-8">
+                    <input name="userUuid" th:field="*{userUuid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">预约状态：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('appointment_status')}">
+                        <input type="radio" th:id="${dict.dictCode}" name="appointmentStatus" th:value="${dict.dictValue}" th:field="*{appointmentStatus}">
+                        <label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">预约时间：</label>
+                <div class="col-sm-8">
+                    <input name="appointmentTime" th:field="*{appointmentTime}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "system/users";
+        $("#form-users-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit/"+$('input[name="userId"]').val(), $('#form-users-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('首页')" />
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeIn">
+        <div class="row m-b-lg">
+
+            <div class="col-sm-6">
+                <div class="tabs-container">
+
+                    <div class="tabs-left">
+                        <ul class="nav nav-tabs">
+                        </ul>
+                        <div class="tab-content ">
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        $(function() {
+            $.get({
+                url: "http://bgapi.ixiaohe.top/getyyNum",
+                dataType: "json",
+                success: function (data) {
+                    console.log("data>>>", data)
+                    var list = data.data
+                    console.log("list", list)
+                    console.log("list.length", list.length)
+                    for (var i = 0; i < list.length; i++) {
+
+                        console.log("i",i)
+                        if (i == list.length - 1) {
+                            $(".nav-tabs").append("<li class='active'><a style='width: 200px;height: 50px;text-alignt: center;' data-toggle='tab' href='#tab-" + i + "'> "+ list[i].date +"(剩余：" + list[i].sum_num + ")" + "</a></li>")
+                            $(".tab-content").append("<div id='tab-" + i + "' class='tab-pane active'><div class='panel-body' style='text-align: center;width: 1700px;margin-left: 200px'><table id='bootstrap-table' class='table table-bordered table-hover' ><thead class='' ><tr ><th style='text-align: center;' ><div class = 'th-inner ' > 时间 </div></th><th style='text-align: center;'><div class='th-inner '>数量</div></th></tr></thead><tbody></tbody></table></div></div>")
+                        } else {
+                            $(".nav-tabs").append("<li><a style='width: 200px;height: 50px;text-align: center;' data-toggle='tab' href='#tab-" + i + "'> "+ list[i].date +"(剩余：" + list[i].sum_num + ")" + "</a></li>")
+                            $(".tab-content").append("<div id='tab-" + i + "' class='tab-pane'><div class='panel-body' style='text-align: center;width: 1700px;margin-left: 200px'><table id='bootstrap-table' class='table table-bordered table-hover' ><thead class='' ><tr ><th style='text-align: center;' ><div class = 'th-inner ' > 时间 </div></th><th style='text-align: center;'><div class='th-inner '>数量</div></th></tr></thead><tbody></tbody></table></div></div>")
+                        }
+                        var info = list[i].make_date_info;
+                        for (var j = 0; j < info.length; j++) {
+                            $("tbody").last().append("<tr><td>" + info[j].time_interval_str + "</td><td>" + info[j].nums + "</td></tr>");
+                        }
+                        console.log("list[i].make_date_info",list[i].make_date_info)
+                        
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    var _errorMsg = '<tr><td colspan="' + options.columns.length + '"><div style="display: block;text-align: center;">' + xhr.responseText + '</div></td></tr>'
+                    $tbody.html(_errorMsg);
+                }
+            });
+        });
+
+        var lineChart = echarts.init(document.getElementById("echarts-line-chart"));
+        var lineoption = {
+            title : {
+                text: '时间段数量折线图'
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['可预约数量']
+            },
+            grid:{
+                x:40,
+                x2:40,
+                y2:24
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : false,
+                    data : ['周一','周二','周三','周四','周五','周六','周日']
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    axisLabel : {
+                        formatter: '{value} °C'
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:'最高数量',
+                    type:'line',
+                    data:[11, 11, 15, 13, 12, 13, 10],
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name: '平均值'}
+                        ]
+                    }
+                }
+            ]
+        };
+        lineChart.setOption(lineoption);
+        $(window).resize(lineChart.resize);
+    </script>
+</body>
+</html>
