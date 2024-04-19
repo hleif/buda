@@ -184,6 +184,126 @@ public class UsersController extends BaseController {
     }
 
     /**
+     * 查询列表
+     */
+    @ApiOperation("同步状态")
+    @RequiresPermissions("system:users:updateBadList")
+    @PostMapping("/updateBadList")
+    @ResponseBody
+    public AjaxResult updateBadList(Users users) {
+
+        List<Users> theUsers = usersService.selectUsersList(users);
+
+        JSONObject.JSONArray jsonArray = new JSONObject.JSONArray();
+        for (Users theUser : theUsers) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("user_id", theUser.getUserId());
+            jsonObject.put("username", theUser.getUsername());
+            jsonObject.put("phone", theUser.getPhone());
+            jsonObject.put("wxid", theUser.getWxid());
+            jsonObject.put("id_number", theUser.getIdNumber());
+            jsonObject.put("openid", theUser.getOpenid());
+            jsonObject.put("usercode", theUser.getUsercode());
+            jsonObject.put("appointment_status", theUser.getAppointmentStatus());
+            jsonObject.put("qrcode_link", theUser.getQrcodeLink());
+            jsonObject.put("book_id", theUser.getBookId());
+            jsonObject.put("user_uuid", theUser.getUserUuid());
+            jsonObject.put("appointment_time", theUser.getAppointmentTime());
+            jsonArray.add(jsonObject);
+
+        }
+        JSONObject param = new JSONObject();
+        param.put("data", jsonArray);
+
+        StringBuffer result = new StringBuffer();
+        //连接
+        HttpURLConnection connection = null;
+        OutputStream os = null;
+        InputStream is = null;
+        BufferedReader br = null;
+        try {
+            //创建连接对象
+            URL url = new URL("http://bgapi.ixiaohe.top/updateUserStatus");
+            //创建连接
+            connection = (HttpURLConnection) url.openConnection();
+            //设置请求方法
+            connection.setRequestMethod("PUT");
+            //设置连接超时时间
+            connection.setConnectTimeout(15000);
+            //设置读取超时时间
+            connection.setReadTimeout(15000);
+            //DoOutput设置是否向httpUrlConnection输出，DoInput设置是否从httpUrlConnection读入，此外发送post请求必须设置这两个
+            //设置是否可读取
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+            //设置通用的请求属性
+            connection.setRequestProperty("accept", "*/*");
+            connection.setRequestProperty("connection", "Keep-Alive");
+            connection.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+
+            //拼装参数
+            if (null != param && !param.equals("")) {
+                //设置参数
+                os = connection.getOutputStream();
+                //拼装参数
+                os.write(param.toString().getBytes(StandardCharsets.UTF_8));
+            }
+            System.out.println(param.toString());
+
+//            connection.connect();
+            //读取响应
+            System.out.println(connection.getResponseMessage());
+            if (connection.getResponseCode() == 200) {
+                is = connection.getInputStream();
+                if (null != is) {
+                    br = new BufferedReader(new InputStreamReader(is, "GBK"));
+                    String temp = null;
+                    while (null != (temp = br.readLine())) {
+                        result.append(temp);
+                        result.append("\r\n");
+                    }
+                }
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //关闭连接
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            //关闭连接
+            connection.disconnect();
+        }
+
+        System.out.println("res>>>>>>>>>>>"+result.toString());
+
+        startPage();
+        List<Users> list = usersService.selectUsersList(users);
+        return success(list);
+    }
+
+    /**
      * 导出列表
      */
     @ApiOperation("导出")
@@ -194,7 +314,7 @@ public class UsersController extends BaseController {
     public AjaxResult export(Users users) {
         List<Users> list = usersService.selectUsersList(users);
         ExcelUtil<Users> util = new ExcelUtil<Users>(Users.class);
-        return util.exportExcel(list, "【请填写功能名称】数据");
+        return util.exportExcel(list, "客户数据");
     }
 
     /**
