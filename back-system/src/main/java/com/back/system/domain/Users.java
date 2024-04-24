@@ -51,6 +51,8 @@ public class Users
     /** $column.columnComment */
     private String userUuid;
 
+    private String route;
+
     /** $column.columnComment */
     @Excel(name = "预约时间", width = 30)
     private String appointmentTime;
@@ -58,7 +60,7 @@ public class Users
     public Users() {
     }
 
-    public Users(Long userId, String username, String phone, String wxid, String idNumber, String openid, String usercode, String appointmentStatus, String qrcodeLink, String bookId, String userUuid, String appointmentTime) {
+    public Users(Long userId, String username, String phone, String wxid, String idNumber, String openid, String usercode, String appointmentStatus, String qrcodeLink, String bookId, String userUuid, String route, String appointmentTime) {
         this.userId = userId;
         this.username = username;
         this.phone = phone;
@@ -70,7 +72,16 @@ public class Users
         this.qrcodeLink = qrcodeLink;
         this.bookId = bookId;
         this.userUuid = userUuid;
+        this.route = route;
         this.appointmentTime = appointmentTime;
+    }
+
+    public String getRoute() {
+        return route;
+    }
+
+    public void setRoute(String route) {
+        this.route = route;
     }
 
     public void setUserId(Long userId)

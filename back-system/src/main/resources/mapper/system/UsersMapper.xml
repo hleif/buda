@@ -36,6 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="qrcodeLink != null  and qrcodeLink != ''"> and qrcode_link = #{qrcodeLink}</if>
             <if test="bookId != null  and bookId != ''"> and book_id = #{bookId}</if>
             <if test="userUuid != null  and userUuid != ''"> and user_uuid = #{userUuid}</if>
+            <if test="route != null  and route != ''"> and route = #{route}</if>
             <if test="appointmentTime != null  and appointmentTime != ''"> and appointment_time like concat('%', #{appointmentTime}, '%')</if>
         </where>
     </select>

@@ -40,8 +40,11 @@ public class UserModel{
     @ApiModelProperty("qrcode_link")
     private String qrcodeLink;
 
+    @ApiModelProperty("route")
+    private String route;
+
     @ApiModelProperty("用户状态")
-    @Excel(name = "用户状态", readConverterExp = "1=预约中,2=预约成功,3=支付成功")
+    @Excel(name = "用户状态", readConverterExp = "1=预约中,2=预约成功,3=支付成功,4=已使用,5=已取消,6=黑名单,7=vip")
     private String appointmentStatus;
 
     @ApiModelProperty("预约时间")
@@ -51,7 +54,7 @@ public class UserModel{
     public UserModel() {
     }
 
-    public UserModel(String username, String phone, String idNumber, String wxid, String openid, String bookId, String userUuid, String usercode, String qrcodeLink, String appointmentStatus, String appointmentTime) {
+    public UserModel(String username, String phone, String idNumber, String wxid, String openid, String bookId, String userUuid, String usercode, String qrcodeLink, String route, String appointmentStatus, String appointmentTime) {
         this.username = username;
         this.phone = phone;
         this.idNumber = idNumber;
@@ -61,8 +64,17 @@ public class UserModel{
         this.userUuid = userUuid;
         this.usercode = usercode;
         this.qrcodeLink = qrcodeLink;
+        this.route = route;
         this.appointmentStatus = appointmentStatus;
         this.appointmentTime = appointmentTime;
+    }
+
+    public String getRoute() {
+        return route;
+    }
+
+    public void setRoute(String route) {
+        this.route = route;
     }
 
     public String getUsername() {
