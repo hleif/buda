@@ -39,7 +39,7 @@ public class Users
     private String usercode;
 
     /** $column.columnComment */
-    @Excel(name = "用户状态", readConverterExp = "1=预约中,2=预约成功,3=支付成功")
+    @Excel(name = "用户状态", readConverterExp = "1=预约中,2=预约成功,3=支付成功,4=已使用,5=已取消,6=黑名单,7=vip")
     private String appointmentStatus;
 
     /** $column.columnComment */

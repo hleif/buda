@@ -223,7 +223,7 @@ public class UsersController extends BaseController {
         BufferedReader br = null;
         try {
             //创建连接对象
-            URL url = new URL("http://bgapilei.ixiaohe.top/updateUserStatus");
+            URL url = new URL("http://bgapilei.ixiaohe.top/checkUserCradId");
             //创建连接
             connection = (HttpURLConnection) url.openConnection();
             //设置请求方法
