@@ -325,7 +325,7 @@ public class Users2Controller extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(UserModel model) throws InvocationTargetException, IllegalAccessException {
-        Users users = new Users(0L, model.getUsername(), model.getPhone(), model.getWxid(), model.getIdNumber(), model.getOpenid(), model.getUsercode(), model.getAppointmentStatus(), model.getQrcodeLink(), model.getBookId(), model.getUserUuid(), "2", model.getAppointmentTime());
+        Users users = new Users(0L, model.getUsername(), model.getPhone(), model.getWxid(), model.getIdNumber(), model.getOpenid(), model.getUsercode(), model.getAppointmentStatus(), model.getQrcodeLink(), model.getBookId(), model.getUserUuid(), model.getAppointmentTime());
         return toAjax(usersService.insertUsers(users));
     }
 
@@ -349,7 +349,7 @@ public class Users2Controller extends BaseController {
     @PostMapping("/edit/{userId}")
     @ResponseBody
     public AjaxResult editSave(UserModel model, @PathVariable Long userId) {
-        Users users = new Users(userId, model.getUsername(), model.getPhone(), model.getWxid(), model.getIdNumber(), model.getOpenid(), model.getUsercode(), model.getAppointmentStatus(), model.getQrcodeLink(), model.getBookId(), model.getUserUuid(), "2", model.getAppointmentTime());
+        Users users = new Users(userId, model.getUsername(), model.getPhone(), model.getWxid(), model.getIdNumber(), model.getOpenid(), model.getUsercode(), model.getAppointmentStatus(), model.getQrcodeLink(), model.getBookId(), model.getUserUuid(), model.getAppointmentTime());
         return toAjax(usersService.updateUsers(users));
     }
 
